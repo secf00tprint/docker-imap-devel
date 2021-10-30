@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER antespi@gmail.com
+LABEL maintainer="antespi@gmail.com, secf00tprint@gmail.com"
 
 ENV MAILNAME=localdomain.test\
     MAIL_ADDRESS=\

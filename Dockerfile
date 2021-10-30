@@ -1,11 +1,11 @@
-FROM ubuntu:21.10
+FROM ubuntu:16.04
 
 MAINTAINER antespi@gmail.com
 
-ENV MAILNAME=localdomain.test \
-    MAIL_ADDRESS= \
-    MAIL_PASS= \
-    MAIL_FS_USER=docker \
+ENV MAILNAME=localdomain.test\
+    MAIL_ADDRESS=\
+    MAIL_PASS=password\
+    MAIL_FS_USER=docker\
     MAIL_FS_HOME=/home/docker
 
 RUN set -x; \
@@ -14,7 +14,7 @@ RUN set -x; \
     && echo "postfix postfix/mailname string $MAILNAME" | debconf-set-selections \
     && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections \
     && hn=$(grep $(hostname) /etc/hosts | cut -f1) \
-    && cp /etc/hosts /etc/hosts2 && sed -i '$ d' /etc/hosts2 && cp /etc/hosts2 /etc/hosts \
+    && cp /etc/hosts /etc/hosts2 && sed -i '$ d' /etc/hosts2 && cp /etc/hosts2 /etc/hosts && rm /etc/hosts2 \
     && echo $hn $MAILNAME >> /etc/hosts \
     && echo $MAILNAME > /etc/hostname \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -47,4 +47,4 @@ VOLUME ["/var/mail"]
 EXPOSE 25 143 993
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
-CMD ["tail", "-fn", "0", "/var/log/mail.log"]
+CMD ["tail", "-f", "/var/log/mail.log"]
